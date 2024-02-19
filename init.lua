@@ -94,5 +94,7 @@ nmap <C-j> :FormatWrite<cr>
 
 " :bash command
 cnoreabbrev bash terminal "C:\Users\robin\scoop\apps\git\current\bin\bash.exe"
+
+au VimResume * :silent! !
 ]])
 
