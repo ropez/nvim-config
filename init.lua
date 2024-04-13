@@ -14,7 +14,9 @@ vim.opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 
-require("lazy").setup("plugins")
+require("lazy").setup("plugins", {
+  change_detection = { enabled = true, notify = false },
+})
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -92,9 +94,5 @@ nnoremap <A-n> <C-w>w
 
 nmap <C-j> :FormatWrite<cr>
 
-" :bash command
-cnoreabbrev bash terminal "C:\Users\robin\scoop\apps\git\current\bin\bash.exe"
-
 au VimResume * :silent! !
 ]])
-
