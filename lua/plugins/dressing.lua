@@ -2,4 +2,5 @@
 
 return {
   'stevearc/dressing.nvim',
+  enable = false,
 }

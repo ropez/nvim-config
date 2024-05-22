@@ -10,7 +10,7 @@ return {
 
   'pocco81/auto-save.nvim',
 
-  { 'numToStr/Comment.nvim', opts = {} },
+  -- { 'numToStr/Comment.nvim', opts = {} },
 
   -- LSP messages in bottom-right corner
   { "j-hui/fidget.nvim", opts = { notification = { override_vim_notify = true } } },
