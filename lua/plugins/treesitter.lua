@@ -73,7 +73,7 @@ return {
           return '<!-- %s -->'
         elseif filetype == 'javascript' or filetype == 'typescript' then
           return '// %s'
-        elseif filetype == 'cs' then
+        elseif filetype == 'cs' or filetype == 'dart' then
           return '// %s'
         elseif filetype == 'css' then
           return '/* %s */'

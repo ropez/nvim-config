@@ -1,5 +1,7 @@
 return {
   'seblj/roslyn.nvim',
 
-  config = true
+  opts = {
+    filewatching = false,
+  },
 }

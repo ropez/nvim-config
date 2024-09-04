@@ -11,13 +11,16 @@ return {
 
       vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
       vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
-      vim.keymap.set('n', '<leader>dd', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
-      vim.keymap.set('n', '<leader>dq', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+      -- vim.keymap.set('n', '<leader>dd', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
+      -- vim.keymap.set('n', '<leader>dq', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
     end
 
     local lspconfig = require('lspconfig')
 
+    -- lspconfig.dartls.setup {}
+
     lspconfig.pyright.setup {}
+
     lspconfig.rust_analyzer.setup {
       experimental = {
         serverStatusNotification = true
@@ -34,10 +37,14 @@ return {
           return
         end
 
-        -- Disable for vite projects
-        local vite_cfg = lspconfig.util.root_pattern("vite.config.js", "vite.config.ts")(fname)
+        -- -- Disable for vue projects
+        local vite_cfg = lspconfig.util.root_pattern("vite.config.ts")(fname)
         if vite_cfg == dir then
-          return
+          for line in io.lines(vite_cfg .. '/vite.config.ts') do
+            if string.find(line, "plugin-vue", 1, true) then
+              return
+            end
+          end
         end
 
         -- Disable for deno functions
@@ -72,7 +79,28 @@ return {
       end
     }
 
-    lspconfig.svelte.setup {}
+    -- -- https://github.com/neovim/nvim-lspconfig/issues/725
+    -- local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
+    -- lsp_capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
+    --
+    -- -- whatever your other plugin requires, for example:
+    -- -- lsp_capabilities.textDocument.completion = require('cmp_nvim_lsp').default_capabilities().textDocument.completion
+    --
+    -- lspconfig.svelte.setup {
+    --   capabilities = lsp_capabilities,
+    -- }
+
+    lspconfig.svelte.setup {
+      -- https://github.com/neovim/nvim-lspconfig/issues/725
+      on_attach = function(client)
+        vim.api.nvim_create_autocmd("BufWritePost", {
+          pattern = { "*.js", "*.ts" },
+          callback = function(ctx)
+            client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
+          end,
+        })
+      end
+    }
 
     lspconfig.denols.setup {
       filetypes = {
@@ -92,6 +120,11 @@ return {
         'typescriptreact', 'vue', 'json',
       },
       root_dir = function(fname)
+        -- local svelte_dir = lspconfig.svelte.document_config.default_config.root_dir(fname)
+        -- if svelte_dir ~= nil then
+        --   return
+        -- end
+
         local dir = lspconfig.util.root_pattern("vite.config.ts", "vite.config.js")(fname)
         if dir == nil then
           return

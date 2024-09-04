@@ -1,6 +1,7 @@
 return {
   "rcarriga/nvim-dap-ui",
   dependencies = {
+    "mxsdev/nvim-dap-vscode-js",
     "mfussenegger/nvim-dap",
     "nvim-neotest/nvim-nio",
     'nvim-telescope/telescope.nvim',
@@ -25,11 +26,17 @@ return {
 
     -- FIXME: Can we import configs from a path prefix?
 
-    dap.adapters.coreclr = {
-      type = 'executable',
-      command = 'netcoredbg',
-      args = {'--interpreter=vscode'}
-    }
+    dap.adapters.coreclr = function(cb, config)
+      if config.processId == nil then
+        return
+      end
+
+      cb({
+        type = 'executable',
+        command = 'netcoredbg',
+        args = {'--interpreter=vscode'}
+      })
+    end
 
     dap.adapters.lldb = {
       type = 'executable',
@@ -37,65 +44,113 @@ return {
       name = 'lldb'
     }
 
+    local dapJs = require("dap-vscode-js")
+
+    dapJs.setup({
+      debugger_path = "/home/robin/.local/share/vscode-js-debug",
+      adapters = { 'pwa-node', 'pwa-chrome', 'node-terminal' },
+    })
+
+    -- dap.adapters.node = {
+    --   type = 'server',
+    --   host = 'localhost',
+    --   port = '45123',
+    --   executable = {
+    --     command = 'node',
+    --     args = {'/home/robin/.local/share/js-debug/src/dapDebugServer.js', "45123"},
+    --   }
+    -- }
+
     local pickers = require("telescope.pickers")
     local finders = require("telescope.finders")
     local conf = require("telescope.config").values
     local actions = require("telescope.actions")
     local action_state = require("telescope.actions.state")
 
-    -- dap.configurations.cs = {
-    --   {
-    --     type = "coreclr",
-    --     name = "attach - netcoredbg",
-    --     request = "attach",
-    --     pid = require('dap.utils').pick_process,
-    --     args = {},
-    --   },
-    -- }
+    local dap_utils = require('dap.utils')
+
+    dap.configurations.cs = {
+      {
+        type = "coreclr",
+        name = "attach - netcoredbg",
+        request = "attach",
+        processId = function()
+          return dap_utils.pick_process({
+            filter = ".*/Debug/.*"
+          })
+        end,
+        args = {},
+      },
+    }
 
     dap.configurations.rust = {
       {
         type = 'lldb',
         name = 'attach - lldb',
         request = "attach",
-        pid = require('dap.utils').pick_process,
+        pid = dap_utils.pick_process,
         args = {},
       },
     }
 
-    dap.configurations.cs = {
-      {
-        type = "coreclr",
-        name = "launch - netcoredbg",
-        request = "launch",
-        env = {
-          DOTNET_ENVIRONMENT = 'Development',
+    for _, lang in ipairs({ 'typescript', 'javascript' }) do
+      dap.configurations[lang] = {
+        {
+          request = 'launch',
+          type = 'pwa-node',
+          name = "Launch file",
+          port = '45123',
+          program = "${file}",
+          cwd = "${workspaceFolder}",
         },
-        program = function()
-          return coroutine.create(function(coro)
-            local opts = {}
-            pickers
-              .new(opts, {
-                prompt_title = "Select DLL",
-                finder = finders.new_oneshot_job({
-                  "find",
-                  "-ipath", '*/bin/debug/*',
-                  "-iname", '*.dll',
-                }, {}),
-                sorter = conf.generic_sorter(opts),
-                attach_mappings = function(buffer_number)
-                  actions.select_default:replace(function()
-                    actions.close(buffer_number)
-                    coroutine.resume(coro, action_state.get_selected_entry()[1])
-                  end)
-                  return true
-                end,
-              })
-              :find()
-          end)
-        end,
-      },
-    }
+        {
+          -- For this to work you need to make sure the node process is started with the `--inspect` flag.
+          request = 'attach',
+          type = 'pwa-node',
+          name = 'Attach',
+          processId = function()
+            return dap_utils.pick_process({
+              filter = ".*--inspect.*"
+            })
+          end,
+          cwd = "${workspaceFolder}",
+        },
+      }
+    end
+
+    -- dap.configurations.cs = {
+    --   {
+    --     type = "coreclr",
+    --     name = "launch - netcoredbg",
+    --     request = "launch",
+    --     env = {
+    --       DOTNET_ENVIRONMENT = 'Development',
+    --     },
+    --     program = function()
+    --       return coroutine.create(function(coro)
+    --         local opts = {}
+    --         pickers
+    --           .new(opts, {
+    --             prompt_title = "Select DLL",
+    --             finder = finders.new_oneshot_job({
+    --               "find",
+    --               "-ipath", '*/bin/debug/*',
+    --               "-iname", '*.dll',
+    --             }, {}),
+    --             sorter = conf.generic_sorter(opts),
+    --             attach_mappings = function(buffer_number)
+    --               actions.select_default:replace(function()
+    --                 actions.close(buffer_number)
+    --                 coroutine.resume(coro, action_state.get_selected_entry()[1])
+    --               end)
+    --               return true
+    --             end,
+    --           })
+    --           :find()
+    --       end)
+    --     end,
+    --   },
+    -- }
 
     -- dap.configurations.rust = {
     --   {
@@ -130,5 +185,8 @@ return {
     --     args = {},
     --   },
     -- }
+    --
+
+    vim.keymap.set('n', '<Leader>du', dapui.toggle, { desc = "Toggle Debug UI" })
   end
 }
