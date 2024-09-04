@@ -3,6 +3,7 @@ return {
   dependencies = { 'nvim-telescope/telescope.nvim' },
   config = function()
     require('workspaces').setup({
+      cd_type = "local",
       hooks = {
         open = { "Telescope find_files" },
       }
@@ -10,6 +11,6 @@ return {
 
     require('telescope').load_extension("workspaces")
 
-    vim.keymap.set('n', '<leader>fw', '<cmd>Telescope workspaces<CR>', { desc = '[F]ind [W]orkspace' })
+    vim.keymap.set('n', '<leader>fw', '<cmd>WorkspacesOpen<CR>', { desc = '[F]ind [W]orkspace' })
   end
 }
