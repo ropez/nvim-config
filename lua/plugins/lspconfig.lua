@@ -27,17 +27,17 @@ return {
       }
     }
 
-    lspconfig.tsserver.setup {
+    lspconfig.ts_ls.setup {
       single_file_support = false,
       root_dir = function(fname)
-        local defaults = lspconfig.tsserver.document_config.default_config
+        local defaults = lspconfig.ts_ls.document_config.default_config
         local dir = defaults.root_dir(fname)
 
         if dir == nil then
           return
         end
 
-        -- -- Disable for vue projects
+        -- Disable for vue projects
         local vite_cfg = lspconfig.util.root_pattern("vite.config.ts")(fname)
         if vite_cfg == dir then
           for line in io.lines(vite_cfg .. '/vite.config.ts') do
@@ -72,6 +72,12 @@ return {
         -- Disable for deno functions
         local deno_cfg = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
         if deno_cfg ~= nil then
+          return
+        end
+
+        -- Disable for svelte
+        local svelte_dir = lspconfig.svelte.document_config.default_config.root_dir(fname)
+        if svelte_dir ~= nil then
           return
         end
 
