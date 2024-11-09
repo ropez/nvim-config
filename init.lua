@@ -41,6 +41,11 @@ vim.o.swapfile = false
 -- Load file changes
 vim.o.autoread = true
 
+-- Comfortable menu
+vim.o.wildmenu = true
+vim.o.wildignorecase = true
+vim.o.wildmode = 'longest:full,full'
+
 
 vim.cmd([[
 " Show filename in the window title
