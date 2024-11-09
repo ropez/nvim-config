@@ -9,4 +9,6 @@ return {
   -- LSP messages in bottom-right corner
   { "j-hui/fidget.nvim", opts = { notification = { override_vim_notify = true } } },
 
+  -- Additional themes
+  { 'projekt0n/github-nvim-theme' },
 }
