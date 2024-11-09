@@ -29,6 +29,22 @@ return {
 
     lspconfig.ts_ls.setup {
       single_file_support = false,
+      init_options = {
+        plugins = {
+          -- Fragile setup: If node versoin is changed, it breaks
+          -- Requires that both @vue/typescript-plugin and @vue/language-server is installed, and the same version
+          {
+            name = "@vue/typescript-plugin",
+            location = "/home/robin/.local/share/fnm/aliases/default/lib/node_modules/@vue/typescript-plugin",
+            languages = {"javascript", "typescript", "vue"},
+          },
+        }
+      },
+      filetypes = {
+        "javascript",
+        "typescript",
+        "vue",
+      },
       root_dir = function(fname)
         local defaults = lspconfig.ts_ls.document_config.default_config
         local dir = defaults.root_dir(fname)
@@ -37,15 +53,15 @@ return {
           return
         end
 
-        -- Disable for vue projects
-        local vite_cfg = lspconfig.util.root_pattern("vite.config.ts")(fname)
-        if vite_cfg == dir then
-          for line in io.lines(vite_cfg .. '/vite.config.ts') do
-            if string.find(line, "plugin-vue", 1, true) then
-              return
-            end
-          end
-        end
+        -- -- Disable for vue projects
+        -- local vite_cfg = lspconfig.util.root_pattern("vite.config.ts")(fname)
+        -- if vite_cfg == dir then
+        --   for line in io.lines(vite_cfg .. '/vite.config.ts') do
+        --     if string.find(line, "plugin-vue", 1, true) then
+        --       return
+        --     end
+        --   end
+        -- end
 
         -- Disable for deno functions
         local deno_cfg = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
@@ -116,34 +132,34 @@ return {
     }
 
     lspconfig.volar.setup {
-      init_options = {
-        vue = {
-          hybridMode = false,
-        },
-      },
-      filetypes = {
-        'typescript', 'javascript', 'javascriptreact',
-        'typescriptreact', 'vue', 'json',
-      },
-      root_dir = function(fname)
-        -- local svelte_dir = lspconfig.svelte.document_config.default_config.root_dir(fname)
-        -- if svelte_dir ~= nil then
-        --   return
-        -- end
-
-        local dir = lspconfig.util.root_pattern("vite.config.ts", "vite.config.js")(fname)
-        if dir == nil then
-          return
-        end
-
-        -- Disable for deno functions
-        local deno_cfg = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
-        if deno_cfg ~= nil then
-          return
-        end
-
-        return dir
-      end
+      -- init_options = {
+      --   vue = {
+      --     hybridMode = false,
+      --   },
+      -- },
+      -- filetypes = {
+      --   'typescript', 'javascript', 'javascriptreact',
+      --   'typescriptreact', 'vue', 'json',
+      -- },
+      -- root_dir = function(fname)
+      --   -- local svelte_dir = lspconfig.svelte.document_config.default_config.root_dir(fname)
+      --   -- if svelte_dir ~= nil then
+      --   --   return
+      --   -- end
+      --
+      --   local dir = lspconfig.util.root_pattern("vite.config.ts", "vite.config.js")(fname)
+      --   if dir == nil then
+      --     return
+      --   end
+      --
+      --   -- Disable for deno functions
+      --   local deno_cfg = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
+      --   if deno_cfg ~= nil then
+      --     return
+      --   end
+      --
+      --   return dir
+      -- end
     }
 
     lspconfig.tailwindcss.setup {}
