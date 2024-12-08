@@ -10,13 +10,27 @@ return {
       ensure_installed = {
         'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript',
         'typescript', 'vimdoc', 'vim', 'bash', 'vue', 'css', 'scss', 'graphql',
-        'svelte'
+        'svelte', 'dart',
       },
       highlight = { enable = true },
-      indent = { enable = true },
+      indent = {
+        enable = true,
+        -- Disabling because it was causing a few seconds of delay when creating
+        -- a new line in the file.
+        -- https://github.com/UserNobody14/tree-sitter-dart/issues/48
+        -- https://github.com/UserNobody14/tree-sitter-dart/issues/46
+        -- https://github.com/nvim-treesitter/nvim-treesitter/issues/4945
+        disable = { "dart", },
+      },
       textobjects = {
         select = {
           enable = true,
+          -- Disabling because it was causing a few seconds of delay when creating
+          -- a new line in the file.
+          -- https://github.com/UserNobody14/tree-sitter-dart/issues/48
+          -- https://github.com/UserNobody14/tree-sitter-dart/issues/46
+          -- https://github.com/nvim-treesitter/nvim-treesitter/issues/4945
+          disable = { "dart", },
           lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
           keymaps = {
             -- You can use the capture groups defined in textobjects.scm
