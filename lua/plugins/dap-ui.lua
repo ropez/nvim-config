@@ -26,6 +26,12 @@ return {
 
     -- FIXME: Can we import configs from a path prefix?
 
+    dap.adapters.dart = {
+      type = "executable",
+      command = "flutter",
+      args = {"debug_adapter"}
+    }
+
     dap.adapters.coreclr = function(cb, config)
       if config.processId == nil then
         return
@@ -68,6 +74,23 @@ return {
     local action_state = require("telescope.actions.state")
 
     local dap_utils = require('dap.utils')
+
+    -- According to documentation, flutter doesn't support attach mode :(
+    dap.configurations.dart = {
+      {
+        type = "dart",
+        request = "launch",
+        name = "Launch Flutter Program",
+        -- The nvim-dap plugin populates this variable with the filename of the current buffer
+        -- program = "${file}",
+        -- The nvim-dap plugin populates this variable with the editor's current working directory
+        -- cwd = "${workspaceFolder}",
+        -- This gets forwarded to the Flutter CLI tool, substitute `linux` for whatever device you wish to launch
+        -- toolArgs = {"-d", "linux"}
+
+        toolArgs = {"--dart-define-from-file", ".env"},
+      }
+    }
 
     dap.configurations.cs = {
       {

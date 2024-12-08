@@ -4,7 +4,7 @@ return {
     on_attach = function()
       vim.keymap.set('n', '<leader>ji', vim.lsp.buf.hover, { desc = "Show information" })
       vim.keymap.set('n', '<leader>jh', vim.lsp.buf.signature_help, { desc = "Signature help" })
-      vim.keymap.set('n', '<leader>jr', vim.lsp.buf.rename, { desc = "Rename" })
+      vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, { desc = "Rename" })
       vim.keymap.set('n', '<a-cr>', vim.lsp.buf.code_action)
       vim.keymap.set('v', '<a-cr>', vim.lsp.buf.code_action)
 

@@ -101,7 +101,5 @@ tnoremap <A-n> <C-\><C-N><C-w>w
 inoremap <A-n> <C-\><C-N><C-w>w
 nnoremap <A-n> <C-w>w
 
-nmap <C-j> :FormatWrite<cr>
-
 au VimResume * :silent! !
 ]])

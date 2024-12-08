@@ -1,3 +1,26 @@
+function set_flutter_pid()
+  local dap_utils = require('dap.utils')
+  vim.g.flutter_pid = dap_utils.pick_process({
+    filter = ".*flutter.*"
+  })
+end
+
+function flutter_reload()
+  if vim.g.flutter_pid == nil then
+    set_flutter_pid()
+  end
+
+  os.execute("kill -USR1 " .. vim.g.flutter_pid)
+end
+
+function flutter_restart()
+  if vim.g.flutter_pid == nil then
+    set_flutter_pid()
+  end
+
+  os.execute("kill -USR2 " .. vim.g.flutter_pid)
+end
+
 return {
   'akinsho/flutter-tools.nvim',
   lazy = false,
@@ -15,5 +38,9 @@ return {
         end,
       }
     }
+
+    vim.keymap.set('n', ',f', set_flutter_pid, { desc = "Select flutter process" })
+    vim.keymap.set('n', ',r', flutter_restart, { desc = "Restart flutter" })
+    vim.keymap.set('n', ',w', flutter_reload, { desc = "Reload flutter" })
   end
 }

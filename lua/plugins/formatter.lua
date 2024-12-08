@@ -12,7 +12,8 @@ return {
       graphql = 'prettierd .gql',
       cs = 'dotnet csharpier',
       dart = 'dart format --line-length=100 -o show',
-      terraform = 'terraform fmt -'
+      terraform = 'tofu fmt -',
+      json = 'jq',
     }
   },
 

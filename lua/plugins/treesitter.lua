@@ -65,24 +65,5 @@ return {
     vim.opt.foldmethod = 'expr'
     vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
     vim.opt.foldlevelstart = 99
-
-    local get_option = vim.filetype.get_option
-    vim.filetype.get_option = function(filetype, opt)
-      if opt == 'commentstring' then
-        if filetype == 'vue' or filetype == 'svelte' then
-          return '<!-- %s -->'
-        elseif filetype == 'javascript' or filetype == 'typescript' then
-          return '// %s'
-        elseif filetype == 'cs' or filetype == 'dart' then
-          return '// %s'
-        elseif filetype == 'css' then
-          return '/* %s */'
-        elseif filetype == 'graphql' or filetype == 'terraform' then
-          return '# %s'
-        end
-      end
-
-      return get_option(filetype, opt)
-    end
   end,
 }
