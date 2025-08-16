@@ -11,4 +11,12 @@ return {
 
   -- Additional themes
   { 'projekt0n/github-nvim-theme' },
+
+  {
+    'ropez/declarative.nvim',
+
+    enabled = true,
+    lazy = false,
+    priority = -1000,
+  },
 }

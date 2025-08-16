@@ -18,21 +18,19 @@ vim.g.loaded_netrwPlugin = 1
 
 vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 
+vim.o.termguicolors = true
+
 require("lazy").setup("plugins", {
   change_detection = { enabled = true, notify = false },
+  dev = {
+    path = string.format("%s/nvim", os.getenv("HOME")),
+    patterns = {'ropez'},
+    fallback = true,
+  }
 })
-
--- Set highlight on search
-vim.o.hlsearch = false
-
--- Make line numbers default
-vim.wo.number = true
 
 -- Sync clipboard between OS and Neovim.
 vim.o.clipboard = 'unnamedplus'
-
--- Enable break indent
-vim.o.breakindent = true
 
 -- Save undo history
 vim.o.undofile = true
@@ -46,12 +44,7 @@ vim.o.wildmenu = true
 vim.o.wildignorecase = true
 vim.o.wildmode = 'longest:full,full'
 
-
 vim.cmd([[
-" Show filename in the window title
-set title
-set noignorecase
-
 " Switch between the last two files
 nnoremap ,, <c-^>
 
@@ -91,10 +84,14 @@ inoremap <A-h> <C-\><C-N><C-w>h
 inoremap <A-j> <C-\><C-N><C-w>j
 inoremap <A-k> <C-\><C-N><C-w>k
 inoremap <A-l> <C-\><C-N><C-w>l
-nnoremap <A-h> <C-w>h
-nnoremap <A-j> <C-w>j
-nnoremap <A-k> <C-w>k
-nnoremap <A-l> <C-w>l
+" nnoremap <A-h> <C-w>h
+" nnoremap <A-j> <C-w>j
+" nnoremap <A-k> <C-w>k
+" nnoremap <A-l> <C-w>l
+
+" Use <C-p> and <C-n> like arrow keys in command line
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
 
 " Alt-n toggle window
 tnoremap <A-n> <C-\><C-N><C-w>w

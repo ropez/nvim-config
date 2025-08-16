@@ -1,0 +1,129 @@
+colorscheme = 'catppuccin-mocha'
+
+[options]
+number = true
+relativenumber = false
+cursorline = false
+cursorcolumn = false
+hlsearch = true
+breakindent = true
+wrap = false
+title = true
+ignorecase = false
+ts = 4
+sts = 4
+
+# Share clipboard with desktop applications
+clipboard = 'unnamedplus'
+
+# Spell checking
+spell = false
+
+# [[keymap]]
+# seq = '<space>s'
+# cmd = 'set spell!'
+# desc = 'Toggle spellcheck'
+
+[[keymap]]
+seq = '<space><space>'
+cmd = 'Telescope find_files'
+
+[[keymap]]
+seq = '<space>fd'
+cmd = 'Telescope diagnostics'
+
+[[keymap]]
+seq = '<space>fe'
+cmd = 'Telescope diagnostics severity_limit=error'
+
+[[keymap]]
+seq = '<space>fc'
+cmd = 'Telescope colorscheme'
+
+[[keymap]]
+seq = '<space>..'
+cmd = 'Telescope find_files cwd=..'
+
+[[keymap]]
+seq = '<space>fb'
+cmd = 'Telescope buffers'
+
+[[keymap]]
+seq = '<space>fg'
+cmd = 'Telescope live_grep'
+
+[[keymap]]
+seq = '<space>fh'
+cmd = 'Telescope help_tags'
+
+[[keymap]]
+seq = '<space>ff'
+cmd = 'Telescope resume'
+
+[[keymap]]
+seq = 'gr'
+cmd = 'Telescope lsp_references'
+
+[[keymap]]
+seq = 'gd'
+cmd = 'Telescope lsp_definitions'
+
+[[keymap]]
+seq = 'gi'
+cmd = 'Telescope lsp_implementations'
+
+[[keymap]]
+seq = '<space>ga'
+cmd = 'ASToggle'
+
+[[keymap]]
+seq = ',f'
+cmd = 'FlutterRun'
+
+[[keymap]]
+seq = ',r'
+cmd = 'FlutterRestart'
+
+[[keymap]]
+seq = ']]q'
+cmd = 'cnfile'
+desc = 'Next file in quickfix list'
+
+[[keymap]]
+seq = '[[q'
+cmd = 'cpfile'
+desc = 'Previous file in quickfix list'
+
+[[keymap]]
+seq = '<space>fq'
+cmd = 'Telescope quickfix'
+
+[[keymap]]
+seq = '<C-w>u'
+cmd = 'lua require("dapui").toggle()'
+desc = "Toggle Debug UI"
+
+[[keymap]]
+seq = '<C-w>f'
+cmd = 'FlutterLogToggle'
+desc = "Toggle flutter output"
+
+[[keymap]]
+seq = '<Esc>'
+cmd = 'nohlsearch'
+
+[[keymap]]
+seq = '<Leader>tt'
+cmd = 'lua require("neotest").run.run_last()'
+desc = 'Run last test'
+
+[[keymap]]
+seq = '<Leader>tr'
+cmd = 'lua require("neotest").run.run()'
+desc = 'Run nearest test'
+
+[[keymap]]
+seq = '<Leader>td'
+cmd = 'lua require("neotest").run.run({ strategy = "dap" })'
+desc = 'Debug nearest test'
+

@@ -75,23 +75,25 @@ return {
 
     local dap_utils = require('dap.utils')
 
-    -- According to documentation, flutter doesn't support attach mode :(
-    dap.configurations.dart = {
-      {
-        type = "dart",
-        request = "launch",
-        name = "Launch Flutter Program",
-        -- The nvim-dap plugin populates this variable with the filename of the current buffer
-        -- program = "${file}",
-        -- The nvim-dap plugin populates this variable with the editor's current working directory
-        -- cwd = "${workspaceFolder}",
-        -- This gets forwarded to the Flutter CLI tool, substitute `linux` for whatever device you wish to launch
-        -- toolArgs = {"-d", "linux"}
+    -- -- According to documentation, flutter doesn't support attach mode :(
+    -- dap.configurations.dart = {
+    --   {
+    --     type = "dart",
+    --     request = "launch",
+    --     name = "Launch Flutter Program",
+    --     -- The nvim-dap plugin populates this variable with the filename of the current buffer
+    --     -- program = "${file}",
+    --     -- The nvim-dap plugin populates this variable with the editor's current working directory
+    --     -- cwd = "${workspaceFolder}",
+    --     -- This gets forwarded to the Flutter CLI tool, substitute `linux` for whatever device you wish to launch
+    --     -- toolArgs = {"-d", "linux"}
+    --
+    --     toolArgs = {"--dart-define-from-file", ".env"},
+    --   }
+    -- }
 
-        toolArgs = {"--dart-define-from-file", ".env"},
-      }
-    }
-
+    -- To attach to dotnet test, set
+    -- export VSTEST_HOST_DEBUG=1
     dap.configurations.cs = {
       {
         type = "coreclr",
@@ -115,31 +117,6 @@ return {
         args = {},
       },
     }
-
-    for _, lang in ipairs({ 'typescript', 'javascript' }) do
-      dap.configurations[lang] = {
-        {
-          request = 'launch',
-          type = 'pwa-node',
-          name = "Launch file",
-          port = '45123',
-          program = "${file}",
-          cwd = "${workspaceFolder}",
-        },
-        {
-          -- For this to work you need to make sure the node process is started with the `--inspect` flag.
-          request = 'attach',
-          type = 'pwa-node',
-          name = 'Attach',
-          processId = function()
-            return dap_utils.pick_process({
-              filter = ".*--inspect.*"
-            })
-          end,
-          cwd = "${workspaceFolder}",
-        },
-      }
-    end
 
     -- dap.configurations.cs = {
     --   {
@@ -174,6 +151,31 @@ return {
     --     end,
     --   },
     -- }
+
+    for _, lang in ipairs({ 'typescript', 'javascript' }) do
+      dap.configurations[lang] = {
+        {
+          request = 'launch',
+          type = 'pwa-node',
+          name = "Launch file",
+          port = '45123',
+          program = "${file}",
+          cwd = "${workspaceFolder}",
+        },
+        {
+          -- For this to work you need to make sure the node process is started with the `--inspect` flag.
+          request = 'attach',
+          type = 'pwa-node',
+          name = 'Attach',
+          processId = function()
+            return dap_utils.pick_process({
+              filter = ".*--inspect.*"
+            })
+          end,
+          cwd = "${workspaceFolder}",
+        },
+      }
+    end
 
     -- dap.configurations.rust = {
     --   {
@@ -210,6 +212,5 @@ return {
     -- }
     --
 
-    vim.keymap.set('n', '<Leader>du', dapui.toggle, { desc = "Toggle Debug UI" })
   end
 }

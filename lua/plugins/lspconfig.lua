@@ -21,21 +21,31 @@ return {
 
     lspconfig.pyright.setup {}
 
+    lspconfig.terraformls.setup {}
+
     lspconfig.rust_analyzer.setup {
       experimental = {
         serverStatusNotification = true
-      }
+      },
+
+      settings = {
+        ["rust-analyzer"] = {
+          check = {
+            command = "clippy",
+          },
+        },
+      },
     }
 
     lspconfig.ts_ls.setup {
       single_file_support = false,
       init_options = {
         plugins = {
-          -- Fragile setup: If node versoin is changed, it breaks
+          -- Fragile setup: If node version is changed, it breaks
           -- Requires that both @vue/typescript-plugin and @vue/language-server is installed, and the same version
           {
             name = "@vue/typescript-plugin",
-            location = "/home/robin/.local/share/fnm/aliases/default/lib/node_modules/@vue/typescript-plugin",
+            location = "/home/robin/.asdf/installs/nodejs/22.11.0/lib/node_modules/@vue/typescript-plugin",
             languages = {"javascript", "typescript", "vue"},
           },
         }
@@ -131,42 +141,46 @@ return {
       root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
     }
 
-    lspconfig.volar.setup {
-      -- init_options = {
-      --   vue = {
-      --     hybridMode = false,
-      --   },
-      -- },
-      -- filetypes = {
-      --   'typescript', 'javascript', 'javascriptreact',
-      --   'typescriptreact', 'vue', 'json',
-      -- },
-      -- root_dir = function(fname)
-      --   -- local svelte_dir = lspconfig.svelte.document_config.default_config.root_dir(fname)
-      --   -- if svelte_dir ~= nil then
-      --   --   return
-      --   -- end
-      --
-      --   local dir = lspconfig.util.root_pattern("vite.config.ts", "vite.config.js")(fname)
-      --   if dir == nil then
-      --     return
-      --   end
-      --
-      --   -- Disable for deno functions
-      --   local deno_cfg = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
-      --   if deno_cfg ~= nil then
-      --     return
-      --   end
-      --
-      --   return dir
-      -- end
-    }
+    -- lspconfig.volar.setup {
+    --   -- init_options = {
+    --   --   vue = {
+    --   --     hybridMode = false,
+    --   --   },
+    --   -- },
+    --   -- filetypes = {
+    --   --   'typescript', 'javascript', 'javascriptreact',
+    --   --   'typescriptreact', 'vue', 'json',
+    --   -- },
+    --   -- root_dir = function(fname)
+    --   --   -- local svelte_dir = lspconfig.svelte.document_config.default_config.root_dir(fname)
+    --   --   -- if svelte_dir ~= nil then
+    --   --   --   return
+    --   --   -- end
+    --   --
+    --   --   local dir = lspconfig.util.root_pattern("vite.config.ts", "vite.config.js")(fname)
+    --   --   if dir == nil then
+    --   --     return
+    --   --   end
+    --   --
+    --   --   -- Disable for deno functions
+    --   --   local deno_cfg = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
+    --   --   if deno_cfg ~= nil then
+    --   --     return
+    --   --   end
+    --   --
+    --   --   return dir
+    --   -- end
+    -- }
+
+    lspconfig.kotlin_language_server.setup {}
 
     lspconfig.tailwindcss.setup {}
 
     vim.diagnostic.config({
       virtual_text = false,
     })
+
+    vim.lsp.enable('gopls')
 
     -- FIXME: Is there a global default setup?
     on_attach()
