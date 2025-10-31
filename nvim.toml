@@ -12,6 +12,7 @@ title = true
 ignorecase = false
 ts = 4
 sts = 4
+winborder = 'rounded'
 
 # Share clipboard with desktop applications
 clipboard = 'unnamedplus'

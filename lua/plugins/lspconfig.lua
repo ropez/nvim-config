@@ -19,11 +19,20 @@ return {
 
     -- lspconfig.dartls.setup {}
 
-    lspconfig.pyright.setup {}
+    vim.lsp.enable('pyright');
 
-    lspconfig.terraformls.setup {}
+    vim.lsp.enable('tofu_ls');
+    vim.lsp.config('tofu_ls', {
+      filetypes = {
+        "opentofu",
+        "opentofu-vars",
+        "terraform",
+        "terraform-vars",
+      }
+    });
 
-    lspconfig.rust_analyzer.setup {
+    vim.lsp.enable('rust_analyzer')
+    vim.lsp.config('rust_analyzer', {
       experimental = {
         serverStatusNotification = true
       },
@@ -35,9 +44,10 @@ return {
           },
         },
       },
-    }
+    })
 
-    lspconfig.ts_ls.setup {
+    vim.lsp.enable('ts_ls')
+    vim.lsp.config('ts_ls', {
       single_file_support = false,
       init_options = {
         plugins = {
@@ -55,74 +65,62 @@ return {
         "typescript",
         "vue",
       },
-      root_dir = function(fname)
-        local defaults = lspconfig.ts_ls.document_config.default_config
-        local dir = defaults.root_dir(fname)
+      -- root_dir = function(fname)
+      --   local defaults = lspconfig.ts_ls.document_config.default_config
+      --   local dir = defaults.root_dir(fname)
+      --
+      --   if dir == nil then
+      --     return
+      --   end
+      --
+      --   -- -- Disable for vue projects
+      --   -- local vite_cfg = lspconfig.util.root_pattern("vite.config.ts")(fname)
+      --   -- if vite_cfg == dir then
+      --   --   for line in io.lines(vite_cfg .. '/vite.config.ts') do
+      --   --     if string.find(line, "plugin-vue", 1, true) then
+      --   --       return
+      --   --     end
+      --   --   end
+      --   -- end
+      --
+      --   -- Disable for deno functions
+      --   local deno_cfg = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
+      --   if deno_cfg ~= nil then
+      --     return
+      --   end
+      --
+      --   return dir
+      -- end
+    })
 
-        if dir == nil then
-          return
-        end
-
-        -- -- Disable for vue projects
-        -- local vite_cfg = lspconfig.util.root_pattern("vite.config.ts")(fname)
-        -- if vite_cfg == dir then
-        --   for line in io.lines(vite_cfg .. '/vite.config.ts') do
-        --     if string.find(line, "plugin-vue", 1, true) then
-        --       return
-        --     end
-        --   end
-        -- end
-
-        -- Disable for deno functions
-        local deno_cfg = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
-        if deno_cfg ~= nil then
-          return
-        end
-
-        return dir
-      end
-    }
-
-    -- lspconfig.omnisharp.setup {
-    --   cmd = { 'omnisharp' },
-    -- }
-    lspconfig.biome.setup {
-      root_dir = function(fname)
-        local defaults = lspconfig.biome.document_config.default_config
-        local dir = defaults.root_dir(fname)
-
-        if dir == nil then
-          return
-        end
-
-        -- Disable for deno functions
-        local deno_cfg = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
-        if deno_cfg ~= nil then
-          return
-        end
-
-        -- Disable for svelte
-        local svelte_dir = lspconfig.svelte.document_config.default_config.root_dir(fname)
-        if svelte_dir ~= nil then
-          return
-        end
-
-        return dir
-      end
-    }
-
-    -- -- https://github.com/neovim/nvim-lspconfig/issues/725
-    -- local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
-    -- lsp_capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
+    -- vim.lsp.enable('biome')
+    -- vim.lsp.config('biome', {
+    --   root_dir = function(fname)
+    --     local defaults = lspconfig.biome.document_config.default_config
+    --     local dir = defaults.root_dir(fname)
     --
-    -- -- whatever your other plugin requires, for example:
-    -- -- lsp_capabilities.textDocument.completion = require('cmp_nvim_lsp').default_capabilities().textDocument.completion
+    --     if dir == nil then
+    --       return
+    --     end
     --
-    -- lspconfig.svelte.setup {
-    --   capabilities = lsp_capabilities,
-    -- }
+    --     -- Disable for deno functions
+    --     local deno_cfg = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
+    --     if deno_cfg ~= nil then
+    --       return
+    --     end
+    --
+    --     -- Disable for svelte
+    --     local svelte_dir = lspconfig.svelte.document_config.default_config.root_dir(fname)
+    --     if svelte_dir ~= nil then
+    --       return
+    --     end
+    --
+    --     return dir
+    --   end
+    -- })
 
-    lspconfig.svelte.setup {
+    vim.lsp.enable('svelte')
+    vim.lsp.config('svelte', {
       -- https://github.com/neovim/nvim-lspconfig/issues/725
       on_attach = function(client)
         vim.api.nvim_create_autocmd("BufWritePost", {
@@ -132,55 +130,23 @@ return {
           end,
         })
       end
-    }
+    })
 
-    lspconfig.denols.setup {
+    vim.lsp.enable('denols')
+    vim.lsp.config('denols', {
       filetypes = {
         'typescript'
       },
       root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
-    }
+    })
 
-    -- lspconfig.volar.setup {
-    --   -- init_options = {
-    --   --   vue = {
-    --   --     hybridMode = false,
-    --   --   },
-    --   -- },
-    --   -- filetypes = {
-    --   --   'typescript', 'javascript', 'javascriptreact',
-    --   --   'typescriptreact', 'vue', 'json',
-    --   -- },
-    --   -- root_dir = function(fname)
-    --   --   -- local svelte_dir = lspconfig.svelte.document_config.default_config.root_dir(fname)
-    --   --   -- if svelte_dir ~= nil then
-    --   --   --   return
-    --   --   -- end
-    --   --
-    --   --   local dir = lspconfig.util.root_pattern("vite.config.ts", "vite.config.js")(fname)
-    --   --   if dir == nil then
-    --   --     return
-    --   --   end
-    --   --
-    --   --   -- Disable for deno functions
-    --   --   local deno_cfg = lspconfig.util.root_pattern("deno.json", "deno.jsonc")(fname)
-    --   --   if deno_cfg ~= nil then
-    --   --     return
-    --   --   end
-    --   --
-    --   --   return dir
-    --   -- end
-    -- }
-
-    lspconfig.kotlin_language_server.setup {}
-
-    lspconfig.tailwindcss.setup {}
+    vim.lsp.enable('kotlin_language_server');
+    vim.lsp.enable('tailwindcss');
+    vim.lsp.enable('gopls')
 
     vim.diagnostic.config({
       virtual_text = false,
     })
-
-    vim.lsp.enable('gopls')
 
     -- FIXME: Is there a global default setup?
     on_attach()

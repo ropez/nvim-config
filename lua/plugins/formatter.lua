@@ -13,7 +13,7 @@ return {
       vue = 'prettierd .vue',
       svelte = 'prettierd .svelte',
       graphql = 'prettierd .gql',
-      cs = 'dotnet csharpier',
+      cs = 'csharpier format',
       dart = 'dart format --line-length=120 -o show',
       terraform = 'tofu fmt -',
       json = 'jq',
