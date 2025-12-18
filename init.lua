@@ -12,6 +12,9 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
+-- HACK Don't know how to put this in the plugin config
+vim.g.tmux_navigator_no_mappings = 1
+
 -- Disable netrw
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -70,7 +73,10 @@ vmap <C-/> gc
 imap <C-v> <C-r>+
 
 " Map ,/ to grep for last search
-map ,/ :Ggrep '/'
+map ,/ :Ggrep '\<=expand("<cword>")<cr>\>'
+
+" Git grep for the word under cursor, don't jump to first occurance, but open in telescope
+map <C-f> :silent Ggrep! '\<=expand("<cword>")<cr>\>' \| Telescope quickfix<cr>
 
 " Get out of terminal
 tnoremap <Esc> <C-\><C-n>
