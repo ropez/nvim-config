@@ -3,7 +3,7 @@ return {
 
   opts = {
     filetype = {
-      rust = 'rustfmt --edition 2021',
+      rust = 'rustfmt --edition 2024',
       -- rust = 'leptosfmt -rs',
       go = 'gofmt',
       bicep = 'bicep-linux-x64 format - --stdout',
