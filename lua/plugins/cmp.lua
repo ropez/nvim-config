@@ -31,7 +31,7 @@ return {
 
       sources = cmp.config.sources({
         { name = 'nvim_lsp' },
-        { name = 'codeium' },
+        -- { name = 'codeium' },
       }, {
         { name = 'buffer' },
       })
@@ -41,6 +41,20 @@ return {
     -- vim.api.nvim_set_keymap('s', '<Tab>', 'vsnip#jumpable(1) ? "<Plug>(vsnip-jump-next)" : "<Tab>"', { expr = true, noremap = true })
     -- vim.api.nvim_set_keymap('i', '<S-Tab>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<S-Tab>"', { expr = true, noremap = true })
     -- vim.api.nvim_set_keymap('s', '<S-Tab>', 'vsnip#jumpable(-1) ? "<Plug>(vsnip-jump-prev)" : "<S-Tab>"', { expr = true, noremap = true })
+
+    local trigger_codeium = function()
+      cmp.complete {
+        config = {
+          sources = {
+            { name = 'codeium' },
+          }
+        }
+      }
+    end
+
+    -- TODO Maybe <C-space> can toggle between different modes?
+    vim.keymap.set('i', '<C-M-Space>', trigger_codeium, { desc = 'trigger codeium completion', noremap = true })
+    vim.keymap.set('i', '<M-,>', trigger_copilot, { desc = 'trigger copilot completion', noremap = true })
 
     vim.api.nvim_set_keymap('i', '<C-e>', '<Plug>(vsnip-jump-next)', { noremap = true })
     vim.api.nvim_set_keymap('s', '<C-e>', '<Plug>(vsnip-jump-next)', { noremap = true })
