@@ -8,6 +8,8 @@ syntax keyword tacoKeyword if
 syntax keyword tacoKeyword while
 syntax keyword tacoKeyword else
 syntax keyword tacoKeyword for
+syntax keyword tacoKeyword break
+syntax keyword tacoKeyword continue
 syntax keyword tacoKeyword return
 syntax keyword tacoKeyword assert
 syntax keyword tacoKeyword enum
@@ -22,13 +24,17 @@ syntax keyword tacoConstant arguments
 syntax keyword tacoType int
 syntax keyword tacoType str
 syntax keyword tacoType bool
+syntax keyword tacoType range
 
 syntax match tacoComment "#.*$"
 
+syntax region tacoString start=/"/ end=/"/ contains=tacoInterp
+syntax region tacoVerbatimString start=/"""/ end=/"""/ contains=tacoInterp
+
 syntax region tacoInterp start=/\$/ end=/\>/ contained contains=tacoIdentifier
 syntax region tacoInterp start=/\${/ end=/}/ contained contains=tacoKeyword,tacoType,tacoString,tacoNumber,tacoIdentifier,tacoRecord,tacoOperator
+syntax match tacoInterp /\$\$/ contains=tacoString
 
-syntax region tacoString start=/"/ end=/"/ contains=tacoInterp
 syntax match tacoNumber /\v\d+/
 
 syntax match tacoIdentifier /\v[a-z_][a-zA-Z0-9_]*/
@@ -42,6 +48,7 @@ highlight link tacoKeyword Keyword
 highlight link tacoType Type
 highlight link tacoComment Comment
 highlight link tacoString String
+highlight link tacoVerbatimString String
 highlight link tacoNumber Number
 highlight link tacoRecord Identifier
 highlight link tacoIdentifier @property
