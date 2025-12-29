@@ -26,11 +26,11 @@ return {
 
     -- FIXME: Can we import configs from a path prefix?
 
-    dap.adapters.dart = {
-      type = "executable",
-      command = "flutter",
-      args = {"debug_adapter"}
-    }
+    -- dap.adapters.dart = {
+    --   type = "executable",
+    --   command = "flutter",
+    --   args = {"debug_adapter"}
+    -- }
 
     dap.adapters.coreclr = function(cb, config)
       if config.processId == nil then
@@ -39,7 +39,7 @@ return {
 
       cb({
         type = 'executable',
-        command = 'netcoredbg',
+        command = '/home/robin/.local/share/nvim/netcoredbg/netcoredbg',
         args = {'--interpreter=vscode'}
       })
     end
